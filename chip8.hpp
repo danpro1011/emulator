@@ -8,6 +8,8 @@ class Chip8 {
     bool loadRom(const std::string &filename); // want address of string file
 
     void Cycle(); // fetch -> decode -> execute opcode
+
+    void CPUReset();
     
     
     private:
