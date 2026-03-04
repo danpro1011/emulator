@@ -1,4 +1,6 @@
 #include <string>
+#include <array>
+#include <cstdint>
 #pragma once
 
 class Chip8 {
@@ -14,9 +16,9 @@ class Chip8 {
     
     private:
     // memory
-    uint8_t memory[4096]{};
+    std::array<uint8_t, 4096> memory{};
     //registers
-    uint8_t reg[16]{};
+    std::array<uint8_t, 16> reg{};
     //12 bit index register 
     uint16_t indexReg{}; // ignore 4 bits in this Register
     //program counter
@@ -24,11 +26,11 @@ class Chip8 {
     
     //stack
     uint8_t sp{}; //pointer
-    uint16_t stack[32]{}; // 48 bytes to 12 levels
+    std::array<uint16_t, 32> stack{}; // 48 bytes upscaled to 64
 
     uint8_t delayTimer{};
     uint8_t soundTimer{};
 
     //0 to F "8", "4", "6", "2" directional input. array stores 0/1, 0 = not pressed, 1 = pressed
-    uint8_t input[16]{};
+    std::array<uint8_t, 16> input{};
 };

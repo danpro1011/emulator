@@ -27,8 +27,8 @@ void Chip8::CPUReset() {
     delayTimer = 0;
     soundTimer = 0;
     
-    memset(reg, 0, sizeof(reg));
-    memset(memory, 0, sizeof(memory));
-    memset(stack, 0, sizeof(stack));
-    memset(input, 0, sizeof(input));
+    reg.fill(0);
+    memory.fill(0);
+    stack.fill(0);
+    input.fill(0);
 };
