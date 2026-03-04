@@ -4,5 +4,6 @@ We want to create a gameboy emulator in C/C++. The purpose of this project is pu
 We will update this later.
 
 Useful links for Chip-8
+
 http://www.codeslinger.co.uk/pages/projects/chip8.html
 http://www.codeslinger.co.uk/files/emu.pdf
