@@ -10,7 +10,7 @@ Chip8::Chip8() {
 bool Chip8::loadRom(const std::string &filename) {
     // Open the file as a stream of binary and move pointer to end
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
-
+    
     if (file.is_open()) {
         // give size of the file
         std::streampos size = file.tellg();
@@ -27,9 +27,10 @@ bool Chip8::loadRom(const std::string &filename) {
         }
 
         delete[] buffer;
+        return true;
     }
-
-
+    
+    return false;
 };
 
 void Chip8::Cycle() {

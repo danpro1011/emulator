@@ -22,7 +22,7 @@ class Chip8 {
     //12 bit index register 
     uint16_t indexReg{}; // ignore 4 bits in this Register
     //program counter
-    uint16_t PC = 0x200; // start at 0x200 below is reserved
+    uint16_t PC; // start at 0x200 below is reserved
     
     //stack
     uint8_t sp{}; //pointer
