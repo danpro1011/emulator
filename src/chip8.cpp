@@ -6,16 +6,25 @@ Chip8::Chip8() {
 };
 
 bool Chip8::loadRom(const std::string &filename) {
+    // Open the file
 
+    // Read the btyes of the file
+
+    // Intrepret the btyes of the file
 };
 
 void Chip8::Cycle() {
-    // Fetch
+    // Fetch 
+    uint16_t opcode = memory[PC];
+    opcode <<= 8; 
+    opcode |= memory[PC + 1];
+    PC += 2;
 
     // Decode
 
     // Execute
 };
+
 
 /*
  * We will reset the emulator to initial (safe) conditions 

@@ -34,7 +34,4 @@ class Chip8 {
     //0 to F "8", "4", "6", "2" directional input. array stores 0/1, 0 = not pressed, 1 = pressed
     std::array<uint8_t, 16> input{};
 
-
-    // Opcode
-    uint16_t opcodes{};
 };
