@@ -1,16 +1,35 @@
 #include "chip8.hpp"
 #include <fstream>
 
+const uint16_t START_ADDRESS = 0x200;
+
 Chip8::Chip8() {
-    PC = 0x200;
+    PC = START_ADDRESS;
 };
 
 bool Chip8::loadRom(const std::string &filename) {
-    // Open the file
+    // Open the file as a stream of binary and move pointer to end
+    std::ifstream file(filename, std::ios::binary | std::ios::ate);
 
-    // Read the btyes of the file
+    if (file.is_open()) {
+        // give size of the file
+        std::streampos size = file.tellg();
+        char* buffer = new char[size];
 
-    // Intrepret the btyes of the file
+        // fill the buffer
+        file.seekg(0, std::ios::beg);
+        file.read(buffer, size);
+        file.close();
+
+        //  load the rom into chip's memory 
+        for (uint16_t i = 0; i < size; i++) {
+            memory[PC + i] = buffer[i];
+        }
+
+        delete[] buffer;
+    }
+
+
 };
 
 void Chip8::Cycle() {
@@ -34,7 +53,7 @@ void Chip8::Cycle() {
  */
 void Chip8::CPUReset() {
     indexReg = 0;
-    PC = 0x200;
+    PC = START_ADDRESS;
     sp = 0;
     delayTimer = 0;
     soundTimer = 0;
