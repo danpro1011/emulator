@@ -21,6 +21,9 @@ void Chip8::Cycle() {
     PC += 2;
 
     // Decode
+    switch(opcode & 0XF000) {
+        
+    }
 
     // Execute
 };
