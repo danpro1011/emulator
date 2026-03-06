@@ -76,7 +76,7 @@ void Chip8::OP_00E0_ClearScreen() {
 }
 
 void Chip8::OP_00EE_ReturnFromSubroutine() {
-    --sp;
+    sp--;
     PC = stack[sp];
 };
 
@@ -89,6 +89,6 @@ void Chip8::OP_2NNN_CallSubroutine() {
     uint16_t address = opcode & 0x0FFFu;
     
     stack[sp] = PC;
-    ++sp;
+    sp++;
     PC = address;
 }
