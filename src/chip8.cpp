@@ -35,7 +35,7 @@ bool Chip8::loadRom(const std::string &filename) {
 
 void Chip8::Cycle() {
     // Fetch 
-    uint16_t opcode = memory[PC];
+    opcode = memory[PC];
     opcode <<= 8; 
     opcode |= memory[PC + 1];
     PC += 2;
@@ -64,3 +64,23 @@ void Chip8::CPUReset() {
     stack.fill(0);
     input.fill(0);
 };
+
+// Opcode functions
+
+void Chip8::OP_0NNN_CallMachineCode() {
+
+}
+
+void Chip8::OP_00E0_ClearScreen() {
+    video.fill(0);
+}
+
+void Chip8::OP_00EE_ReturnFromSubroutine() {
+    --sp;
+    PC = stack[sp];
+};
+
+void Chip8::OP_1NNN_Jump() {
+    uint16_t address = opcode & 0x0FFFu;
+    PC = address;
+}
