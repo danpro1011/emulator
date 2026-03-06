@@ -84,3 +84,11 @@ void Chip8::OP_1NNN_Jump() {
     uint16_t address = opcode & 0x0FFFu;
     PC = address;
 }
+
+void Chip8::OP_2NNN_CallSubroutine() {
+    uint16_t address = opcode & 0x0FFFu;
+    
+    stack[sp] = PC;
+    ++sp;
+    PC = address;
+}
