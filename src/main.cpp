@@ -1,4 +1,3 @@
-#include <iostream>
 #include "chip8.cpp"
 
 int main(int argc, char **argv) {
