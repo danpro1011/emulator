@@ -58,6 +58,42 @@ void Chip8::Cycle() {
         case 0x1000:
             OP_1NNN_Jump();
             break;
+        case 0x2000:
+            OP_2NNN_CallSubroutine();
+            break;
+        case 0x300:
+            OP_3XNN_SkipIfVxEqualsNN();
+            break;
+        case 0x400:
+            OP_4XNN_SkipIfVxNotEqualsNN();
+            break;
+        case 0x5000;
+            OP_5XY0_SkipIfVxEqualsVy();
+            break;
+        case 0x6000:
+            OP_6XNN_SetVx();
+            break;
+        case 0x7000:
+            OP_7XNN_AddNNToVx();
+            break;
+        case 0x8000:
+            break;
+        case 0x9000:
+            OP_9XY0_SkipIfVxNotEqualsVy();
+            break;
+        case 0xA000:
+            OP_ANNN_SetI();
+            break;
+        case 0xB000:
+            OP_BNNN_JumpToNNNPlusV0();
+            break;
+        case 0xC000:
+            OP_CXNN_SetVxToRandomAndNN();
+            break;
+        case 0xE000:
+            break;
+        case 0xF000:
+            break;
     }
 
     // Execute
