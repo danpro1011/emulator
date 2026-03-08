@@ -316,6 +316,11 @@ void Chip8::OP_FX29_SetIToFontSpriteAddress() {
 
 void Chip8::OP_FX33_StoreBCDOfVx() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t value = reg[regXid];
+
+    memory[indexReg] = value / 100;
+    memory[indexReg + 1] = (value / 10) % 10;
+    memory[indexReg + 2] = (value) % 10;
 }
 
 
@@ -326,6 +331,7 @@ void Chip8::OP_FX55_StoreV0ThroughVxInMemory() {
 void Chip8::OP_FX65_LoadV0ThroughVxFromMemory() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
 }
+
 
 
 
