@@ -326,10 +326,17 @@ void Chip8::OP_FX33_StoreBCDOfVx() {
 
 void Chip8::OP_FX55_StoreV0ThroughVxInMemory() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
+    for (uint8_t i = 0; i <=  regXid; i ++) {
+        memory[indexReg + i] = reg[i];
+    }
+
 }
 
 void Chip8::OP_FX65_LoadV0ThroughVxFromMemory() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
+    for (uint8_t i = 0; i <=  regXid; i ++) {
+        reg[i] = memory[indexReg + i];
+    }
 }
 
 
