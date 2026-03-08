@@ -92,3 +92,19 @@ void Chip8::OP_2NNN_CallSubroutine() {
     sp++;
     PC = address;
 }
+
+void Chip8::OP_3XNN_SkipIfVxEqualsNN() {
+
+}
+
+void Chip8::OP_4XNN_SkipIfVxNotEqualsNN() {
+
+}
+
+void Chip8::OP_5XY0_SkipIfVxEqualsVy() {
+
+}
+
+void Chip8::OP_6XNN_SetVx() {
+    
+}
