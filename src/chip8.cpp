@@ -230,31 +230,33 @@ void Chip8::OP_CXNN_SetVxToRandomAndNN() {
 void Chip8::OP_DXYN_DrawSprite() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
     uint8_t regYid = (opcode & 0x00F0) >> 4;
-    uint8_t xPos = reg[regXid] % 64;
-    uint8_t yPos = reg[regYid] % 32;
-    uint8_t height = opcode & 0x000F;
+    uint8_t height = (opcode & 0x000F); 
 
-    reg[0xF] = 0;
+    uint8_t Vx = reg[regXid] % 64;
+    uint8_t Vy = reg[regYid] % 32;
 
-    for (uint8_t row = 0; row < height; row++) {
-        uint8_t spriteByte = memory[indexReg + row];
+    reg[0x000F] = 0;
 
-        for (uint8_t col = 0; col < 8; col++) {
-            uint8_t spritePixel = spriteByte & (0x80 >> col);
+    for(uint8_t i = 0; i < height; i++) {
+        uint8_t byte = memory[indexReg + i];
+        for (uint8_t j = 0; j < 8; j ++) {
+            uint8_t mask = 0x80 >> j;
+            uint8_t byteCheck = mask & byte;
 
-            if (spritePixel) {
-                uint16_t x = (xPos + col) % 64;
-                uint16_t y = (yPos + row) % 32;
+            if (byteCheck != 0) {
+                uint8_t x = (Vx + j) % 64;
+                uint8_t y = (Vy + i) % 32;
                 uint16_t screenIndex = y * 64 + x;
 
-                if (video[screenIndex] == 0xFFFFFFFF) {
-                    reg[0xF] = 1;
+                if (video[screenIndex] == 1) {
+                    reg[0x000F] = 1;
                 }
 
-                video[screenIndex] ^= 0xFFFFFFFF;
+                video[screenIndex] ^= 1;
             }
         }
     }
+
 }
 
 void Chip8::OP_EX9E_SkipIfKeyInVxPressed() {
