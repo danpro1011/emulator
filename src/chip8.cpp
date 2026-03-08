@@ -188,7 +188,84 @@ void Chip8::OP_8XY5_SubtractVyFromVx() {
 void Chip8::OP_8XY6_ShiftVxRight() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
     reg[0x000F] = reg[regXid] & 0x0001;
-    
+    reg[regXid] >>= 1;
 }
+
+void Chip8::OP_8XY7_SetVxToVyMinusVx() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4; 
+    reg[0x000F] = (reg[regYid] >= reg[regXid]) ? 1 : 0;
+    reg[regXid] = reg[regYid] - reg[regXid];
+}
+
+void Chip8::OP_8XYE_ShiftVxLeft() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    reg[0x000F] = reg[regXid] & 0x0080;
+    reg[regXid] <<= 1;
+}
+
+void Chip8::OP_9XY0_SkipIfVxNotEqualsVy() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x0F00) >> 4;
+
+    if(reg[regXid] != reg[regYid]) PC += 2;
+}
+
+void Chip8::OP_ANNN_SetI() {
+    uint16_t address = (opcode & 0x0FFF);
+    indexReg = address;
+}
+
+void Chip8::OP_BNNN_JumpToNNNPlusV0() {
+    uint16_t address = (opcode & 0x0FFF);
+    PC = reg[0] + address;
+}
+
+void Chip8::OP_CXNN_SetVxToRandomAndNN() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t constant = opcode & 0x00FF;
+    reg[regXid] = (rand() % 256) & constant;
+}
+
+void Chip8::OP_DXYN_DrawSprite() {
+    //TODO 
+}
+
+void Chip8::OP_EX9E_SkipIfKeyInVxPressed() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    bool keyPressed = input[reg[regXid]];
+    if (keyPressed){
+        PC += 2;
+    }
+}
+
+void Chip8::OP_EXA1_SkipIfKeyInVxNotPressed() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    bool keyPressed = input[reg[regXid]];
+    if (!keyPressed){
+        PC += 2;
+    }
+}
+
+void Chip8::OP_FX07_SetVxToDelayTimer() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    reg[regXid] = delayTimer;
+}
+
+void Chip8::OP_FX0A_WaitForKeyPress() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    
+    for(uint8_t key = 0; key < 16; key++) {
+        if (input[key]) {
+            reg[regXid] = key;
+            return;
+        }
+    }
+
+    PC -= 2;
+}
+
+
+
 
 
