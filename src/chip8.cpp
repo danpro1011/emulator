@@ -61,13 +61,13 @@ void Chip8::Cycle() {
         case 0x2000:
             OP_2NNN_CallSubroutine();
             break;
-        case 0x300:
+        case 0x3000:
             OP_3XNN_SkipIfVxEqualsNN();
             break;
-        case 0x400:
+        case 0x4000:
             OP_4XNN_SkipIfVxNotEqualsNN();
             break;
-        case 0x5000;
+        case 0x5000:
             OP_5XY0_SkipIfVxEqualsVy();
             break;
         case 0x6000:
@@ -236,13 +236,13 @@ void Chip8::OP_8XY7_SetVxToVyMinusVx() {
 
 void Chip8::OP_8XYE_ShiftVxLeft() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
-    reg[0x000F] = reg[regXid] & 0x0080;
+    reg[0x000F] = reg[regXid] & 0x0080 >> 7;
     reg[regXid] <<= 1;
 }
 
 void Chip8::OP_9XY0_SkipIfVxNotEqualsVy() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
-    uint8_t regYid = (opcode & 0x0F00) >> 4;
+    uint8_t regYid = (opcode & 0x00F0) >> 4;
 
     if(reg[regXid] != reg[regYid]) PC += 2;
 }
