@@ -155,3 +155,40 @@ void Chip8::OP_8XY1_SetVxOrVy() {
     uint8_t regYid = (opcode & 0x00F0) >> 4; 
     reg[regXid] |= reg[regYid];
 }
+
+void Chip8::OP_8XY2_SetVxAndVy() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4; 
+    reg[regXid] &= reg[regYid];
+}
+
+void Chip8::OP_8XY3_SetVxXorVy() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4; 
+    reg[regXid] ^= reg[regYid];
+}
+
+void Chip8::OP_8XY4_AddVyToVx(){
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4;
+    uint16_t sum = reg[regXid] + reg[regYid];
+
+    reg[regXid] = sum & 0x00FF;
+
+    reg[0x000F] = (sum > 0x00FF) ? 1 : 0;
+}
+
+void Chip8::OP_8XY5_SubtractVyFromVx() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4; 
+    reg[0x000F] = (reg[regXid] >= reg[regYid]) ? 1 : 0;
+    reg[regXid] -= reg[regYid];
+}
+
+void Chip8::OP_8XY6_ShiftVxRight() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    reg[0x000F] = reg[regXid] & 0x0001;
+    
+}
+
+
