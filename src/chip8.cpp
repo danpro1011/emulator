@@ -228,7 +228,33 @@ void Chip8::OP_CXNN_SetVxToRandomAndNN() {
 }
 
 void Chip8::OP_DXYN_DrawSprite() {
-    //TODO 
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4;
+    uint8_t xPos = reg[regXid] % 64;
+    uint8_t yPos = reg[regYid] % 32;
+    uint8_t height = opcode & 0x000F;
+
+    reg[0xF] = 0;
+
+    for (uint8_t row = 0; row < height; row++) {
+        uint8_t spriteByte = memory[indexReg + row];
+
+        for (uint8_t col = 0; col < 8; col++) {
+            uint8_t spritePixel = spriteByte & (0x80 >> col);
+
+            if (spritePixel) {
+                uint16_t x = (xPos + col) % 64;
+                uint16_t y = (yPos + row) % 32;
+                uint16_t screenIndex = y * 64 + x;
+
+                if (video[screenIndex] == 0xFFFFFFFF) {
+                    reg[0xF] = 1;
+                }
+
+                video[screenIndex] ^= 0xFFFFFFFF;
+            }
+        }
+    }
 }
 
 void Chip8::OP_EX9E_SkipIfKeyInVxPressed() {
@@ -264,6 +290,41 @@ void Chip8::OP_FX0A_WaitForKeyPress() {
 
     PC -= 2;
 }
+
+void Chip8::OP_FX15_SetDelayTimerToVx() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    delayTimer = reg[regXid];
+}
+
+void Chip8::OP_FX18_SetSoundTimerToVx() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    soundTimer = reg[regXid];
+}
+
+void Chip8::OP_FX1E_AddVxToI() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    indexReg += reg[regXid];
+}
+
+void Chip8::OP_FX29_SetIToFontSpriteAddress() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t digit = reg[regXid] & 0x000F;
+    indexReg = 0x50 + (digit * 5);
+}
+
+void Chip8::OP_FX33_StoreBCDOfVx() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+}
+
+
+void Chip8::OP_FX55_StoreV0ThroughVxInMemory() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+}
+
+void Chip8::OP_FX65_LoadV0ThroughVxFromMemory() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+}
+
 
 
 
