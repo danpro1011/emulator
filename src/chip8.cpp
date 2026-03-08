@@ -41,8 +41,23 @@ void Chip8::Cycle() {
     PC += 2;
 
     // Decode
-    switch(opcode & 0XF000) {
-        
+    switch(opcode & 0XF000) { // Check which condition and then subconditions
+        case 0x0000: // 3 cases 
+            switch (opcode & 0X00FF) {
+                case 0x00EE:
+                    OP_00EE_ReturnFromSubroutine();
+                    break;
+                case 0x00E0:
+                    OP_00E0_ClearScreen();
+                    break;
+                default: // Most machines do nothing here
+                    OP_0NNN_CallMachineCode();
+                    break;
+            }
+            break;
+        case 0x1000:
+            OP_1NNN_Jump();
+            break;
     }
 
     // Execute
@@ -94,17 +109,49 @@ void Chip8::OP_2NNN_CallSubroutine() {
 }
 
 void Chip8::OP_3XNN_SkipIfVxEqualsNN() {
-
+    uint8_t constant = opcode & 0x00FF;
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    if(reg[regXid] == constant){
+        PC += 2;
+    }
 }
 
 void Chip8::OP_4XNN_SkipIfVxNotEqualsNN() {
-
+    uint8_t constant = opcode & 0x00FF;
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    if(reg[regXid] != constant){ 
+        PC += 2;
+    }
 }
 
 void Chip8::OP_5XY0_SkipIfVxEqualsVy() {
-
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4; 
+    if (reg[regYid] == reg[regXid]) {
+        PC += 2;
+    }
 }
 
 void Chip8::OP_6XNN_SetVx() {
-    
+    uint8_t constant = opcode & 0x00FF;
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    reg[regXid] = constant;
+}
+
+void Chip8::OP_7XNN_AddNNToVx() {
+    uint8_t constant = opcode & 0x00FF;
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    reg[regXid] += constant;
+}
+
+void Chip8::OP_8XY0_SetVxToVy() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4; 
+    reg[regXid] = reg[regYid];
+}
+
+void Chip8::OP_8XY1_SetVxOrVy() {
+    uint8_t regXid = (opcode & 0x0F00) >> 8;
+    uint8_t regYid = (opcode & 0x00F0) >> 4; 
+    reg[regXid] |= reg[regYid];
 }
