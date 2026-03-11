@@ -40,7 +40,7 @@ void Chip8::Cycle() {
     opcode |= memory[PC + 1];
     PC += 2;
 
-    // Decode
+    // Decode + Execute
     switch(opcode & 0XF000) { // Check which condition and then subconditions
         case 0x0000: // 3 cases 
             switch (opcode & 0X00FF) {
