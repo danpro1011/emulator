@@ -77,9 +77,41 @@ void Chip8::Cycle() {
             OP_7XNN_AddNNToVx();
             break;
         case 0x8000:
+            switch(opcode & 0x000F) {
+                case 0x0000:
+                    OP_8XY0_SetVxToVy();
+                    break;
+                case 0x0001:
+                    OP_8XY1_SetVxOrVy();
+                    break;
+                case 0x0002:
+                    OP_8XY2_SetVxAndVy();
+                    break;
+                case 0x0003:
+                    OP_8XY3_SetVxXorVy();
+                    break;
+                case 0x0004:
+                    OP_8XY4_AddVyToVx();
+                    break;
+                case 0x0005:
+                    OP_8XY5_SubtractVyFromVx();
+                    break;
+                case 0x0006:
+                    OP_8XY6_ShiftVxRight();
+                    break;
+                case 0x0007:
+                    OP_8XY7_SetVxToVyMinusVx();
+                    break;
+                case 0x000E:
+                    OP_8XYE_ShiftVxLeft();
+                    break;
+                default:
+                    break;
+
+            }
             break;
         case 0x9000:
-            OP_9XY0_SkipIfVxNotEqualsVy();
+            if (opcode & 0x000F) OP_9XY0_SkipIfVxNotEqualsVy();
             break;
         case 0xA000:
             OP_ANNN_SetI();
