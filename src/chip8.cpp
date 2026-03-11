@@ -90,13 +90,54 @@ void Chip8::Cycle() {
         case 0xC000:
             OP_CXNN_SetVxToRandomAndNN();
             break;
+        case 0xD000:
+            OP_DXYN_DrawSprite();
+            break;
         case 0xE000:
+            switch (opcode & 0x00FF) {
+                case 0x009E:
+                    OP_EX9E_SkipIfKeyInVxPressed();
+                    break;
+                case 0x00A1:
+                    OP_EXA1_SkipIfKeyInVxNotPressed();
+                    break;
+                default:
+                    break;
+            }
             break;
         case 0xF000:
+            switch(opcode & 0x00FF) {
+                case 0x0007:
+                    OP_FX07_SetVxToDelayTimer();
+                    break;
+                case 0x000A:
+                    OP_FX0A_WaitForKeyPress();
+                    break;
+                case 0x0015:
+                    OP_FX15_SetDelayTimerToVx();
+                    break;
+                case 0x0018:
+                    OP_FX18_SetSoundTimerToVx();
+                    break;
+                case 0x001E:
+                    OP_FX1E_AddVxToI();
+                    break;
+                case 0x0029:
+                    OP_FX29_SetIToFontSpriteAddress();
+                    break;
+                case 0x0033:
+                    OP_FX33_StoreBCDOfVx();
+                    break;
+                case 0x0055:
+                    OP_FX55_StoreV0ThroughVxInMemory();
+                    break;
+                case 0x0065:
+                    OP_FX65_LoadV0ThroughVxFromMemory();
+                    break;
+            }
             break;
     }
 
-    // Execute
 };
 
 
@@ -236,7 +277,7 @@ void Chip8::OP_8XY7_SetVxToVyMinusVx() {
 
 void Chip8::OP_8XYE_ShiftVxLeft() {
     uint8_t regXid = (opcode & 0x0F00) >> 8;
-    reg[0x000F] = reg[regXid] & 0x0080 >> 7;
+    reg[0x000F] = (reg[regXid] & 0x0080) >> 7;
     reg[regXid] <<= 1;
 }
 
